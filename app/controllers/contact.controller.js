@@ -1,6 +1,7 @@
 const ApiError = require("../api-error");
 const ContactService = require("../services/contact.service");
 const ContactService = require("../services/contact.service");
+const ContactService = require("../services/contact.service");
 const MongoDB = require("../utils/mongodb.util");
 
 exports.create = (req, res) => {
@@ -48,6 +49,24 @@ exports.findAll = async (req,res,next) => {
 
 exports.findOne = (req, res) => {
     res.send({ message: "findOne handler"});
+};
+//Find a single contact with an id
+exports.findOne = async (req, res, next) => {
+    try {
+        const ContactService = new ContactService(MongoDB.client);
+        const document = await ContactService.findById(req.params.id);
+        if(!document) {
+            return next(new ApiError(404,"Contact not found"));
+        }
+        return res.send(document);
+    } catch (error) {
+        return next(
+            new ApiError(
+                500,
+                `Error retrieving contact with id=${req.params.id}`
+            )
+        );
+    }
 };
 
 exports.update = (req, res) => {

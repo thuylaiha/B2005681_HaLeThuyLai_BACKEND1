@@ -43,5 +43,23 @@ class ContactService {
         });
     }
     
+    async findById(id) {
+        return await this.Contact.findOne({
+            _id: ObjectId.isValid(id) ? new ObjectId(id) : null,
+        });
+    }
+
+    async update(id, payload) {
+        const filter = {
+            _id: ObjectId.isValid(id) ? new ObjectId(id) : null,
+        };
+        const update = this.extractContactData(payload);
+        const result = await this.Contact.findOneAndUpdate(
+            filter,
+            {$set: update},
+            {returnDocument: "after"}
+        );
+        return result.value;
+    }
 }
 module.exports = ContactService
