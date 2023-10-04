@@ -1,4 +1,5 @@
 const { ObjectId} = require("mongodb");
+const { deleteAll } = require("../controllers/contact.controller");
 
 class ContactService {
     constructor(client) {
@@ -70,6 +71,14 @@ class ContactService {
         return result.value;
     }
     
+    async findAllFavorite(){
+        return await this.find( { favorite: true });
+    }
+
+    async deleteAll() {
+        const result = await this.Contact.deleteMany({});
+        return result.deletedCount;
+    }
 
 
 }
