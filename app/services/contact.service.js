@@ -56,10 +56,21 @@ class ContactService {
         const update = this.extractContactData(payload);
         const result = await this.Contact.findOneAndUpdate(
             filter,
-            {$set: update},
+            { $set: update},
             {returnDocument: "after"}
         );
         return result.value;
     }
+
+    
+    async this.delete(id) {
+        const result = await this.Contact.findOneAndDelete({
+            _id: ObjectId.isValid(id) ? new ObjectId(id) : null,
+        });
+        return result.value;
+    }
+    
+
+
 }
 module.exports = ContactService
